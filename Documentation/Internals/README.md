@@ -1,11 +1,8 @@
-# Swift Package Manager Developer Docs
+# 스위프트 패키지 매니저 개발자 문서
 
-This directory contains documentation on the engineering design decisions
-and internals of the Swift package manager. It is primarily focused at developers
-interested in working on the Swift package manager, but may also be useful to advanced users
-wanting to understand exactly how the package manager behaves.
+이 디렉토리는 엔지니어링 디자인에 대한 결정들과 스위프트 패키지 매니저의 내부에 대한 문서를 포함하고 있다. 이것은 스위프트 패키지 매니저로 작업하는 것에 흥미를 가진 개발자들에 주로 초점이 맞춰져 있다. 하지만 패키지 매니저가 동작하는 방식을 정확히 이해하고 싶어하는 고급 사용자들에게도 도움이 될 것이다.
 
-* [Swift-based Manifest Format](SwiftBasedManifestFormat.md)
 
-  This document explains our motivation in choosing a Swift-based manifest format,
-  and the exact behavior we intend to support.
+* [스위프트-기반의 매니페스트 포맷](SwiftBasedManifestFormat.md)
+
+  이 문서는 스위프트-기반의 매니페스트 포맷을 선택하는 데 동기부여된 부분과 우리가 지원하고자 의도하는 정확한 동작에 대해 설명하고 있다.

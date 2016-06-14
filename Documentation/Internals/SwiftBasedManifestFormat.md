@@ -1,4 +1,4 @@
-# Swift-based Manifest Format
+# 스위프트-기반 매니페스트 포맷
 
 ## Purpose
 
