@@ -1,4 +1,4 @@
-# Swift Package Manager Community Proposal
+# 스위프트 패키지 매니저 커뮤니티 제안 
 
 Package managers play a significant role in modern language ecosystems,
 and are as varied as the languages for which they are created.
@@ -17,7 +17,7 @@ we have prepared the following Community Proposal.
 
 * * *
 
-## Problem Statement
+## 문제점 서술 
 
 The world is full of fascinating problems waiting to be solved.
 Software is created to solve some of these problems.
@@ -34,7 +34,7 @@ it can be reused in other situations where that problem arises.
 However, code reuse has an associated coordination cost.
 The question is how to minimize that cost.
 
-### Packaging
+### 패키징 
 
 Code must first be organized in a way that allows for reuse.
 We define a _package_ to be
@@ -43,7 +43,7 @@ Packages are identified by a chosen name
 and may include additional information,
 such as a list of authors and license information.
 
-### Versioning
+### 버저닝 
 
 As code is developed,
 it may add new features, remove existing features, or change underlying behavior.
@@ -53,7 +53,7 @@ which corresponds to a particular revision.
 A version number typically takes the form of `MAJOR.MINOR.PATCH`,
 which semantically identifies different versions of the same package.
 
-### Dependencies
+### 의존성 
 
 A package may also specify one or more other packages as _dependencies_,
 which are required to build the package.
@@ -65,7 +65,7 @@ For example,
 an `Orchestra` package may specify a `Cello` package as a dependency,
 with the requirement that the dependency's version is at least `2.0.0`.
 
-### "Dependency Hell"
+### "의존성 지옥"
 
 When a project's packages have requirements that conflict with one another,
 it creates a situation known colloquially as _"dependency hell"_.
@@ -92,7 +92,7 @@ making it easy to use and well-suited to the needs of developers.
 
 * * *
 
-## Aspects of the Design
+## 디자인 측면
 
 Although the Swift Package Manager is still an early work-in-progress,
 many of our design goals are reflected in the current product.
@@ -115,7 +115,7 @@ Instead, we are prioritizing conventions and designs
 that minimize the friction for distributing Swift code for individuals,
 and promote the development of a healthy package ecosystem for the community.
 
-### A Build System for Swift Packages
+### 스위프트 패키지를 위한 빌드 시스템 
 
 Swift is a compiled language.
 As such, the Swift Package Manager provides a _build system_ for Swift (`swift build`),
@@ -128,7 +128,7 @@ across package definitions and the Swift compiler.
 This allows for the build system to introspect package definitions
 and use insights from the compiler to manage their configuration.
 
-### Convention-Based Configuration
+### 컨벤션-기반 설정
 
 Rather than requiring that every detail of a package is explicitly configured,
 the Swift Package Manager establishes a set of conventions

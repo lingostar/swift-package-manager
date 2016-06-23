@@ -1,9 +1,9 @@
-# Developing Packages
+# 패키지 개발하기
 
 Simply put: a package is a git repository with semantically versioned tags,
 that contains Swift sources and a `Package.swift` manifest file at its root.
 
-## Turning a Library Module into an External Package
+## 라이브러리 모듈을 외부 패키지로 만들기 
 
 If you are building an app with several modules, at some point you may decide to
 make that module into an external package. Doing this makes that code available
@@ -34,8 +34,7 @@ let package = Package(
 Now type `swift build`
 
 
-## Working on Apps and Packages Side-by-Side
-
+## 앱과 패키지를 나란히 작업하기
 If you are developing an app that consumes a package
 and you need to work on that package simultaneously
 then you have several options:
@@ -56,7 +55,7 @@ caused dependency hell for your co-workers.
 It is our intention to provide tooling to prevent such situations,
 but for now please be aware of the caveats.
 
-## Packaging legacy code
+## 패키징 레거시 코드 
 
 You may be working with code that builds both as a package and not.  For example, you may be packaging a project that also builds with Xcode.
 

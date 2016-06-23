@@ -1,38 +1,40 @@
 # 스위프트-기반 매니페스트 포맷
 
-## Purpose
+## 목적
 
-We need to have some facility for describing additional package metadata, outside of the content in the sources files. This document describes a proposal for using a Swift-based format for this manifest data.
+우리는 부가적인 패키지 메타데이터를 기술할 수 있는 어떤 도구를, 소스 파일들 내부의 콘텐트 바깥영역에 가질 필요가 있다.이 문서는 이 매니페스트 데이터를 위한 스위프트-기반 포맷 사용에 대한 제안을 기술한다.
 
 
-## Motivation
+## 동기부여
 
-The package manager strives to support a "convention based" project structure which is derived from the project files and source code. This approach allows users to primarily focus on authoring their actual software and expect that the tools will assemble it into a product by following sensible defaults.
+패키지 매니저는 프로젝트 파일들과 소스 코드로부터 얻어지는 "컨벤션 기반의" 프로젝트 구조를 지원하기 위해 노력한다. 이러한 접근 방식은 사용자들이 우선 실제 소프트웨어 저작에 초점을 맞추도록 하고 툴들은 다음의 알맞은 default에 의해 그것을 프러덕트로 조립하는 것으로 예상하게 한다.
 
-However, packages also have information which cannot naturally be inferred from the project structure. To that end, we need to support some kind of manifest which contains the additional project information.
+하지만, 패키지들은 프로젝트 구조로부터 자연스럽게 추론할 수 없는 정보도 가지고 있다. 이러한 경우, 우리는 부가적인 프로젝트 정보를 가지고 있는  어떤 매니페스트를 지원할 필요가 있다.
 
-At a high level, the primary purpose of this manifest is to:
 
-* Complement the convention based system.
+하이 레벨에서, 이 매니페스트의 주된 목적은 다음과 같다 :
 
-  The manifest complements the convention based system, by being the one definitive place to add any project metadata that would otherwise require the project to use a custom configuration. The goal is that 80%+ of projects should be able to use only a manifest and the convention based layout.
-    
-  By allowing the manifest to extend and override a few key, carefully picked details of the convention based system, then we allow many more projects to use the system without needing to define complex conventions.
+* 컨벤션 기반의 시스템을 보완한다. 
+ 
+  이 메니페스트는 프로젝트 메타데이터를 추가할 수 있는 유일하고 확실한 위치가 됨으로서 컨벤션 기반의 시스템을 보완한다. 이게 없으면 프로젝트는 커스텀 설정을 사용해야 한다. 목표는 80% 이상의 프로젝트가 메니페스트와 컨벤션 기반의 레이아웃만을 사용해도 되도록 하는 것이다.
 
-* Provide package information in a standard format.
+  매니페스트가 컨벤션 기반 시스템의 디테일들 중 주의깊게 뽑은 몇 개의 키를 확장하고 오버라이드 하도록 허락함으로서, 더 많은 프로젝트들이 복잡한 컨벤션들을 정의할 필요 없이 이 시스템을 사용할 수 있도록 한다.
 
-  There are certain pieces of information which are important enough and common enough that we would like all projects to include, or any projects which do include them to do so in a standardized manner. For example, the license declaration of a project should follow a very standard definition.
+* 패키지 정보를 표준 포맷으로 제공한다.
 
-* Serve as an indicator of a package manager project.
+  모든 프로젝트들이 포함하기를 희망하는, 또는 그것을 포함한 모든 프로젝트들이 표준 방식으로 하길 원하는 몇 가지 매우 중요하고 매우 일반적인 정보 조각들이 있다. 예를 들어, 프로젝트의 라이센스 선언문은 매우 표준화된 정의를 따라야 한다.
 
-  Although it is simple, having the manifest exist with a known name at the root of a package serves as an indicator to developers and tools of the type of project and how they are expected to interact with it.
+* 패키지 매니저 프로젝트의 인디케이터로서의 역할을 한다.
 
-* Provide support for programmatic analysis and editing of project structure.
+매우 단순하지만 패키지의 루트에 알려진 이름의 매니페스트를 가진다는 것은 개발자와 그런 타입의 프로젝트의 툴들에게, 그것들이 어떻게 상호작용할 것인지를 예상할 수 있게 해 주는 인디케이터로서의 역할을 한다.
+
+
+* 프로그램적인 분석과 프로젝트 구조 편집에 대한 지원을 제공한다. 
 
   The manifest should be machine readable and writeable format. We envision a variety of tools that may want to inspect the contents of packages (for example, to build information for an index) or make automatic edits to the project structure. For example, when introducing a new library dependency via adding an import statement, we would like it if a tool could, after a user prompt, automatically update the manifest to specify the new dependency.
 
 
-## Proposal
+## 제안
 
 We propose to use the Swift language itself to write the manifest. An example of a proposed manifest for a small cross-platform project with several libraries might look something like this:
 
@@ -90,7 +92,7 @@ Target(name: "AccessibilityUtils", platforms: [.Linux])
 *does not* add a new target. Rather, it modifies the existing target `AccessibilityUtils` to specify what platforms it is available for.
 
 
-## Customization
+## 커스터마이즈하기
 
 We intend for the declaration package definition to cover 80%+ of the use cases for modifying the convention based system. Nevertheless, there are some kinds of legitimate project structures which are difficult or cumbersome to encode in a purely declarative model. For example, designing a general purpose mechanism to cover all the ways in which users may wish to divide their source code is difficult.
 
@@ -116,7 +118,7 @@ for target in package.targets {
 It is important to note that even when using this feature, package manifest still **must be** declarative. That is, the only output of a manifest is a complete description of the package, which is then operated on by the package manager and build tools. For example, a manifest **must not** attempt to do anything to directly interact with the build output. All such interactions must go through a documented, public API vended by the package manager libraries and surfaced via the package manager tools.
 
 
-## Editor Support
+## 편집기 지원
 
 The package definition format being written in Swift is problematic for tools that wish to perform automatic updates to the file (for example, in response to a user action, or to bind to a user interface), or for situations where dealing with executable code is problematic.
 
@@ -127,7 +129,7 @@ The customization section above will *not* be written in this syntax. Instead, t
 All tools which process the package manifest **must** validate that the declaration portion of the specification fits into the restricted language subset, to ensure a consistent user experience.
 
 
-## Implementation
+## 구현
 
 We need to have efficient, programmatic access to the data from the manifest for use in the package manager and associated tools. Additionally, we may wish to use this data in contexts where the executable-code nature of the manifest format is problematic. On the other hand, we also want the file format to properly match the Swift language.
 
@@ -136,7 +138,7 @@ To satisfy these two goals, we intend to extract the package metadata from the m
 Tools that do not need to be as strict with the manifest format will be able to load it by using Swift directly to execute the file and then interact with the package definition API to extract the constructed model.
 
 
-## Discussion
+## 논의
 
 We decided to use a Swift-based format for the manifest because we believe it gives developers the best experience for working with and describing their project. The primary alternative we considered was to use a declarative format encoded in a common data format like JSON. Although that would simplify implementation of the tooling around the manifest, it has the downside that users must then learn this additional language, and the development of high quality tools for that (documentation, syntax coloring, parsing diagnostics) isn't aligned with our goal of building great tools for Swift. In contrast, using the Swift language means that we can leverage all of the work on Swift to make those tools great.
 

@@ -1,5 +1,4 @@
-# `Package.swift` — The Manifest File
-
+# `Package.swift` — 매니페스트 파일 
 Instructions for how to build a package are provided by
 a manifest file, called `Package.swift`.
 You can customize this file to
@@ -70,7 +69,7 @@ let package = Package(
 )
 ```
 
-## Customizing Builds
+## 빌드 커스터마이즈 하기
 
 That the manifest is Swift allows for powerful customization, for example:
 
@@ -88,6 +87,6 @@ package.targets.append(target)
 With a standard configuration file format like JSON such a feature would result in a dictionary structure with increasing complexity for every such feature.
 
 
-## Depending on Apple Modules (eg. Foundation)
+## 애플 모듈들에 의존하기 (eg. Foundation)
 
 At this time there is no explicit support for depending on Foundation, AppKit, etc, though importing these modules should work if they are present in the proper system location. We will add explicit support for system dependencies in the future. Note that at this time the Package Manager has no support for iOS, watchOS, or tvOS platforms.

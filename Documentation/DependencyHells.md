@@ -1,4 +1,4 @@
-# Dependency Hells
+# 의존성 지옥
 
 “Dependency Hell” is the colloquialism for a situation where the graph
 of dependencies required by a project cannot be met. The end-user is 
@@ -15,13 +15,13 @@ how we intend to iterate with these hells in mind.
 
 The following are some of the most common “dependency hell” scenarios:
 
-## Inappropriate Versioning
+## 부적합한 버저닝
 A package may specify an inappropriate version for a release.
   For example, a version is tagged `1.2.3`,
   but introduces extensive, breaking API changes
   that should be reflected by a major version bump to `2.0.0`.
 
-## Incompatible Major Version Requirements
+## 호환되지 않는 메이저 버전 요구사항
 A package may have dependencies
   with incompatible version requirements for the same package.
   For example, if `Foo` depends on `Baz` at version `~>1.0`
@@ -31,7 +31,7 @@ A package may have dependencies
   updates to a new major version,
   and it takes a long time for all of those packages to update their dependency.
 
-##Incompatible Minor or Update Version Requirements
+##호환되지 않는 마이너 또는 업데이트 버전 요구사항
 A package may have dependencies that are specified too strictly,
   such that version requirements are incompatible for different minor or update versions.
   For example, if `Foo` depends on `Baz` at version `==2.0.1`
@@ -40,7 +40,7 @@ A package may have dependencies that are specified too strictly,
   This is often the result of a regression introduced in a patch release of a dependency,
   which causes a package to lock that dependency to a particular version.
 
-## Namespace Collision
+## 네임 스페이스 충돌 
 A package may have two or more dependencies that have the same name.
   For example, a `Person` package depends on
   an `Addressable` package that defines a protocol
@@ -49,20 +49,20 @@ A package may have two or more dependencies that have the same name.
   an `Addressable` package that defines a protocol
   for speaking formally to another person.
 
-## Broken Software
+## 망가진 소프트웨어
 A package may have a dependency with an outstanding bug
   that is impacting usability, security, or performance.
   This may simply be a matter of timeliness on the part of the package maintainers,
   or a disagreement about their expectations for the package.
 
-## Global State Conflict
+## 글로벌 스테이트 충돌
 A package may have two or more dependencies that
   presume to have exclusive access to the same global state.
   For example, one package may not be able to accommodate
   another package writing to a particular file path
   while reading from that same file path.
 
-## Package Becomes Unavailable
+## 패키지가 사용불가인 상태가 되다 
 A package may have a dependency on a package that becomes unavailable.
   This may be caused by the source URL becoming inaccessible,
   or maintainers deleting a published version.
