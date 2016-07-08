@@ -26,86 +26,86 @@
 
 * 패키지 매니저 프로젝트의 인디케이터로서의 역할을 한다.
 
-매우 단순하지만 패키지의 루트에 알려진 이름의 매니페스트를 가진다는 것은 개발자와 그런 타입의 프로젝트의 툴들에게, 그것들이 어떻게 상호작용할 것인지를 예상할 수 있게 해 주는 인디케이터로서의 역할을 한다.
+ 매우 단순하지만 패키지의 루트에 알려진 이름의 매니페스트를 가진다는 것은 개발자와 그런 타입의 프로젝트의 툴들에게, 그것들이 어떻게 상호작용할 것인지를 예상할 수 있게 해 주는 인디케이터로서의 역할을 한다.
 
 
 * 프로그램적인 분석과 프로젝트 구조 편집에 대한 지원을 제공한다. 
 
-  The manifest should be machine readable and writeable format. We envision a variety of tools that may want to inspect the contents of packages (for example, to build information for an index) or make automatic edits to the project structure. For example, when introducing a new library dependency via adding an import statement, we would like it if a tool could, after a user prompt, automatically update the manifest to specify the new dependency.
+ 매니페스트는 기계가 읽고 쓸 수 있는 포맷이어야 한다. 패키지의 내용을 검사하고 프로젝트 구조를 자동으로 편집하길  원할 것 같은 다양한 툴(예를 들면, 인덱스를 위한 빌드 정보)들을 구상하고 있다. 예를 들어, import 구문을 추가해서 새로운 라이브러리 의존성을 도입하려 할 때, 툴이 할 수 있다면, 사용자에게 알린 뒤, 자동으로 매니페스트를 업데이트해서 새로운 의존성을 지정하도록 하고 싶다.
 
 
 ## 제안
 
-We propose to use the Swift language itself to write the manifest. An example of a proposed manifest for a small cross-platform project with several libraries might look something like this:
+우리는 매니페스트를 작성하는데 스위프트 언어 그 자체를 사용하는 것을 제안한다. 제안하는 매니페스트에 대한 몇 개의 라이브러리를 사용하는 조그만 크로스-플랫폼 프로젝트 예제는 다음과 같다 :
 
 ```swift 
-// This imports the API for declaring packages.
+// 패키지를 선언하기 위한 API를 임포트 한다.
 import PackageDescription
     
-// This declares the package.
+// 패키지를 선언한다.
 let package = Package(
-    // The name of the package (defaults to source root directory name).
+    // 패키지의 이름 (기본값은 소스 루트 디렉토리의 이름).
     name: "Foo",
 
-    // The list of targets in the package.
+    // 패키지의 타겟 리스트.
     targets: [
-        // Declares the main application.
+        // 메인 애플리케이션 선언.
         Target(
             name: "Foo",
-            // Declare the type of application.
+            // 애플리케이션의 타입을 선언.
             type: .Tool,
-            // Declare that this target is a published product of the package
-            // (as opposed to an internal library or tool).
+            // 이 타겟은 패키지의 배포되는 프러덕트임을 선언
+            // (내부 라이브러리나 툴이 아님).
             published: true),
         
-        // Add information on a support library "CoreFoo" (as found by the
-        // convention based system in CoreFoo/**/*.swift).
+        // 지원 라이브러리인 "CoreFoo" 에 대한 정보를 더한다.(CoreFoo/**/*.swift 에 있는 컨벤션 기반의 시스템에 의해 찾을 수 있는 ).
         Target(
             name: "CoreFoo",
             depends: [
-                // The library always depends on the "Utils" target.
+                // 이 라이브러리는 "Utils" 타겟에 항상 의존한다.
                 "Utils",
                 
-                // This library depends on "AccessibilityUtils" on Linux.
+                // 이 라이브러리는 Linux 환경에서는 "AccessibilityUtils" 에 의존한다.
                 .Conditional(name: "AccessibilityUtils", platforms: [.Linux])
             ]),
     
-        // NOTE: There is a "Utils" target inferred by the convention based
-        // system, but we don't need to modify it at all because the defaults
-        // were fine.
+        // 노트: 컨벤션 기반의 시스템에 의해, "Utils" 타겟이 있다는 것을 추론한다.
+        // 하지만, 기본 값들은 괜찮기 때문에 이것을 전혀 수정할 필요가 없다.
     
-        // Declare that the "AccessibilityUtils" target is Linux-specific.
+        // Linux 인 경우에만 "AccessibilityUtils" 타겟을 선언한다.
         Target(name: "AccessibilityUtils", platforms: [.Linux])
 	])
 ```
 
-*NOTE: this example is for expository purposes, the exact APIs are subject to change.*
+*NOTE: 이 예제는 설명을 위한 것이므로, 정확한 API들은 변경될 것이다.*
 
-By writing the manifest in Swift, we ensure a consistent development experience across not only authoring their source code, but also their project metadata. This means developers will have a consistent environment with all of the development conveniences they expect: syntax coloring, code completion, API documentation, and formatting tools. This also ensures that new developers to Swift can focus on learning the language and its tools, not another custom package description format.
+매니페스트를 스위프트로 작성함에 따라, 소스코드를 작성하는 것 뿐만 아니라, 프로젝트 메타데이터를 만드는 데까지 일관된 개발 경험을 보장한다. 이것은 개발자가 모든 개발 편의 사항을 가지고 있는 일관된 환경을 가지게 됨을 의미한다 : 문법 컬러링, 코드 완성, API 문서, 그리고 포매팅 도구까지. 이것은 또한 스위프트에 낯선 개발자들이 스위프트 언어와 그 툴들을 배우는 데 집중하고 다른 커스텀 패키지 디스크립션 포맷을 신경쓰지 않도록 해 준다.
 
-The package description itself is a declarative definition of information which *augments* the convention based system. The actual package definition that will be used for a project consists of the convention based package definition with the package description applied to override or customize default behaviors. For example, this target description:
+패키지 기술 그 자체는 컨벤션 기반 시스템에 *추가적인* 정보에 대한 선언적인 정의이다. 프로젝트에 사용될 실제 패키지 선언은 컨벤션 기반의 패키지 정의와 기본 비헤비어들을 오버라이드 하거나 커스터마이즈 하기 위한 패키지 디스크립션으로 이루어져 있다.
+
+예를 들어, 아래 타켓 설명은
 
 ```swift
 Target(name: "AccessibilityUtils", platforms: [.Linux])
 ```
 
-*does not* add a new target. Rather, it modifies the existing target `AccessibilityUtils` to specify what platforms it is available for.
+새로운 타켓을 더하지 *않는다*. 대신, 이것은 기존의 `AccessibilityUtils`타겟이 어느 플랫폼에서 사용가능한지를 지정하기 위해 수정한다.
 
 
 ## 커스터마이즈하기
 
-We intend for the declaration package definition to cover 80%+ of the use cases for modifying the convention based system. Nevertheless, there are some kinds of legitimate project structures which are difficult or cumbersome to encode in a purely declarative model. For example, designing a general purpose mechanism to cover all the ways in which users may wish to divide their source code is difficult.
+우리는 패키지 정의 선언이 컨벤션 기반의 시스템을 수정하는 80% 이상의 사용 케이스를 커버하기 위해 만들었다. 그럼에도 불구하고, 순수한 선언 모델에서는 인코딩하기 어렵거나 귀찮은 어떤 종류의 적절한 프로젝트 구조가 있다. 예를 들어, 사용자가 자신의 소스코드를 나눠주길 원하는 방식을 만족시키는  일반적인 목적의 매커니즘을 디자인 하는 것은 어렵다.
 
-Instead, we allow users to interact with the `Package` object using its native Swift APIs. The package declaration in a file may be followed by additional code which configures the package using a natural, imperative, Swifty API. For example, this is an example of a project which uses a custom convention for selecting which files build with unchecked optimizations:
+대신, 우리는 사용자들에게 `Package` 오브젝트와 네이티브 Swift API를 이용해 인터렉트할 수 있도록 했다. 파일내의 패키지 디스크립션에는 패키지를 설정하는 자연스러운 명령형 스위프트 API 코드를 추가할 수 있다. 예를 들어, 아래는 어떤 파일이 체크되지 않은 최적화로  빌드될지를 선택하는 커스텀 컨벤션을 사용하는 프로젝트이다.
 
 ```swift
 import PackageDescription
     
 let package = Package(name: "FTW")
     
-// MARK: Custom Configuration
+// MARK: 커스텀 설정
     
-// Build all *_unchecked.swift files using "-Ounchecked" for Release mode.
+// 릴리즈 모드에서 모든 *_unchecked.swift 파일들을 "-Ounchecked"를 사용해서 빌드한다.
 for target in package.targets {
     for source in target.sources {
         if source.path.hasSuffix("_unchecked.swift") {
@@ -115,7 +115,7 @@ for target in package.targets {
 }
 ```
 
-It is important to note that even when using this feature, package manifest still **must be** declarative. That is, the only output of a manifest is a complete description of the package, which is then operated on by the package manager and build tools. For example, a manifest **must not** attempt to do anything to directly interact with the build output. All such interactions must go through a documented, public API vended by the package manager libraries and surfaced via the package manager tools.
+기억해야 할 중요한 것은, 이 기능을 사용한다하더라도 패키지 매니페스트는 여전히 선언적**이어야 한다.** 이것은 매니페스트의 유일한 출력물은 패키지의 완전한 디스크립션이며, 패키지 매니저와 빌드 툴들에 의해 작동되어야 한다. 예를 들어, 매니페스트는 빌드 결과물과 어떤 직접적인 인터렉션을 하려고 시도하지 **않아야 한다.** 그런 모든 인터렉션들은 패키지 매니저 라이브러리에 의해 문서화되고 공개된  API를 거쳐야 하며, 패키지 매니저 툴에 의해 표면화 되어야 한다. 
 
 
 ## 편집기 지원
